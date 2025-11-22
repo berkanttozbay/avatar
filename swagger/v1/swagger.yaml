@@ -1,0 +1,252 @@
+---
+openapi: 3.0.1
+info:
+  title: Language Tutor API V1
+  version: v1
+  description: API documentation for Language Learning Mobile App Backend
+paths:
+  "/api/v1/analyses":
+    post:
+      summary: Create an analysis
+      tags:
+      - Analyses
+      parameters: []
+      responses:
+        '201':
+          description: analysis created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  video_id:
+                    type: integer
+                  user_audio_url:
+                    type: string
+                  stt_output:
+                    type: string
+                    nullable: true
+                  grammar_score:
+                    type: integer
+                  pronunciation_feedback:
+                    type: string
+                    nullable: true
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+                required:
+                - id
+                - video_id
+                - user_audio_url
+                - grammar_score
+        '422':
+          description: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                analysis:
+                  type: object
+                  properties:
+                    video_id:
+                      type: integer
+                    user_audio_url:
+                      type: string
+                  required:
+                  - video_id
+                  - user_audio_url
+  "/api/v1/avatars":
+    get:
+      summary: List all avatars
+      tags:
+      - Avatars
+      responses:
+        '200':
+          description: avatars found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    personality_prompt:
+                      type: string
+                      nullable: true
+                    voice_id:
+                      type: string
+                    image_url:
+                      type: string
+                      nullable: true
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                  required:
+                  - id
+                  - name
+                  - voice_id
+  "/api/v1/reports/weekly":
+    get:
+      summary: Get weekly report
+      tags:
+      - Reports
+      responses:
+        '200':
+          description: weekly report found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  period_start:
+                    type: string
+                  period_end:
+                    type: string
+                  average_score:
+                    type: number
+                  vocabulary_count:
+                    type: integer
+                  generated_summary:
+                    type: string
+                    nullable: true
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+                required:
+                - id
+                - period_start
+                - period_end
+                - average_score
+                - vocabulary_count
+  "/api/v1/subjects":
+    get:
+      summary: List all subjects
+      tags:
+      - Subjects
+      responses:
+        '200':
+          description: subjects found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    level:
+                      type: integer
+                    icon_url:
+                      type: string
+                      nullable: true
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                  required:
+                  - id
+                  - title
+                  - level
+  "/api/v1/subjects/{id}":
+    get:
+      summary: Show a subject
+      tags:
+      - Subjects
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: subject found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  level:
+                    type: integer
+                  icon_url:
+                    type: string
+                    nullable: true
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+                required:
+                - id
+                - title
+                - level
+        '404':
+          description: subject not found
+  "/api/v1/subjects/{subject_id}/videos":
+    get:
+      summary: List videos for a subject
+      tags:
+      - Videos
+      parameters:
+      - name: subject_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: videos found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    subject_id:
+                      type: integer
+                    title:
+                      type: string
+                    video_url:
+                      type: string
+                    transcript:
+                      type: string
+                      nullable: true
+                    duration_seconds:
+                      type: integer
+                    created_at:
+                      type: string
+                    updated_at:
+                      type: string
+                  required:
+                  - id
+                  - subject_id
+                  - title
+                  - video_url
+                  - duration_seconds
+servers:
+- url: http://localhost:3000
+  variables:
+    defaultHost:
+      default: localhost:3000
